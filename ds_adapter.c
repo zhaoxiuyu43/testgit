@@ -1960,3 +1960,43 @@ uint16_t datalen){
 
 #endif
 
+void lq_init(){
+    lqret_t retVal;
+    uint8_t mode;
+    watch_time_t watch_time;
+    bleapi_get_system_timestamp(&watch_time);
+    DC_LOG_INFO( "lq_init %lld\n",(uint64_t)((uint64_t)watch_time.timestamp*1000+watch_time.millisecond));
+    retVal = LQ_IDH_initMsUnix((uint64_t)watch_time.timestamp*1000+watch_time.millisecond);
+    if (retVal!= RET_OK)
+    {
+        DC_LOG_ERROR( "Err init lq:%u\n" , retVal);
+    }
+    retVal = LQ_ODS_registerBiometricCallback (&stubContextPointer, LQ_BIOMETRIC_HEART_RATE, biometric_callback_hr);
+    if (retVal!= RET_OK)
+    {
+        DC_LOG_ERROR( "Error hr cb:%u\n" , retVal);
+    }
+    retVal = LQ_ODS_registerBiometricCallback (&stubContextPointer, LQ_BIOMETRIC_RR_INTERVAL, biometric_callback_rr);
+    if (retVal!= RET_OK)
+    {
+        DC_LOG_ERROR( "Error rr cb:%u\n" , retVal);
+    }
+
+    retVal = LQ_Initialize((uint32_t)watch_time.timestamp);
+    if (retVal!= RET_OK)
+    {
+        DC_LOG_ERROR( "Error LQ_Initialize:%u\n" , retVal);
+    }
+    fact_db_get_st(&mode);
+    if(mode == FactoryMode_USERDEBUG)
+        retVal = LQ_IDH_setDebugLogMode(IDH_DEBUG_LOG_INPUT);
+    else
+        retVal = LQ_IDH_setDebugLogMode(IDH_DEBUG_LOG_OFF);
+    if (retVal!= RET_OK)
+    {
+        DC_LOG_ERROR( "Error setDebugLogMode:%u\n" , retVal);
+    }
+}
+
+
+
