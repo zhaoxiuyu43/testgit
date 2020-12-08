@@ -598,6 +598,8 @@ def spae(c_show):
             else:
                 for r in m:
                     print(n + '\t' + r)
+c_show = show(sys.argv[1])
+spae(c_show)
 
 
 # if __name__ == '__main__':
