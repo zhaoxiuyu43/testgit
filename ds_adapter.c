@@ -941,6 +941,12 @@ void ds_send_notification(void *input,uint16_t len,uint16_t flag){
         positon += strlen(data_ptr->date)+1;
     }else
         data_ptr->date = NULL;  
+    if(flag == 1)
+        send_msg_weather_day_forecast_info(data_ptr,ds_common_cb);
+    else{
+        send_msg_weather_hour_forecast_info(data_ptr,ds_common_cb);
+    }
+
     send_msg_notification_info(data_ptr,ds_common_cb);
 }
 #if 0
