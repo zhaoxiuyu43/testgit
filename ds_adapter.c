@@ -365,7 +365,10 @@ void ds_delete_ids(void *input){
             file = file->pNext;
         }
     }
-
+     if(num==0 || len==0){
+        log_wtf();
+        return;
+    }
     if(file_list == NULL){
         DC_LOG_INFO("ds_delete_ids no ids list\n");
     }else{
