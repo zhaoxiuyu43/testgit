@@ -1,10 +1,14 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys
 import re
 import os
 import chardet
 import check_name
 # 检验函数名称和参数是否存在且形式正确
-
+# full = sys.argv[0]
+# g = sys.argv[1]
+# print(full)
 key = ['s0001', 's0002', 's0003', 's0004','s0005', 's0006', 's0007', 's0008','s0009','s0010']
 key_2 = ['01', '02', '03', '04', '05', '06','07','08','09','10']
 fail = dict([(i, dict([(i, [])for i in key_2]))for i in key])
@@ -240,11 +244,12 @@ def canshu(data):
     return g
 
 
-def struct_part(data,data_file):
+def struct_part(data,data_file,file_full_path):
     global fail
     number_one = ['void', 'int', 'char', 'short', 'long', 'float', 'double','sizeof',
                   'int8_t', 'int16_t', 'int32_t', 'int64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t']
-    filepath_01 = r'D:\zhaoxiuyu\桌面\aa'
+    filepath_01 = os.path.split(file_full_path)[0]
+    # filepath_01 = r'D:\zhaoxiuyu\桌面\aa'
     file_name = filename(data_file)
     number_two = file(filepath_01,file_name)
     number_two = list(filter(None,number_two))
@@ -272,7 +277,7 @@ def struct_part(data,data_file):
                 if st_name[j] not in lie and re.search(pattern,st_name[j]) is None and st_name != [] \
                         and re.search(pattern_two,st_name[j]) is None:
                     fail['s0004']['04'].append('指针或地址后需跟函数或变量名,line:%d' % (i + 1))
-    return lie,number_strsum
+    return lie, number_strsum
 
 
 def shuangmu(data_sql,i,m):
@@ -345,18 +350,16 @@ def test_zhizhen(data,i,sts):
     return fail
 
 
-def struct_show(data, data_file):
+def struct_show(data, data_file,file_full_path):
     global fail
     number_one = ['void', 'int', 'char', 'short', 'long', 'float', 'double', 'sizeof','extern','static',
                   'int8_t', 'int16_t', 'int32_t', 'int64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t']
     sp, s_part = num(data)
-    data_full, bian_name = struct_part(data,data_file)
+    data_full, bian_name = struct_part(data,data_file,file_full_path)
     s_part.append(bian_name)
     sp.extend(data_full); sp.extend(number_one)
     sp = list(filter(None, sp))
     sp = set(sp); sts = tuple(sp)
-    # hi = xingc(data)
-    # ts(data,hi)
     fu_hao = ( '+', '-', '/','+=', '-=', '/=', '*=', '<<=', '>>+', '|=', '^=', '<', '>','|=',
                '<=', '>=', '!=', '||', '!', '^', '<<', '>>')
     for i in range(len(data)):
@@ -561,7 +564,7 @@ def show(file_full_path):
         # 确定点和句点 的空格情况
         check_name.test_judian(data)
         # 赋值符号,双目或者三目运算符前后都要有一个空格
-        struct_show(data, data_1)
+        struct_show(data, data_1,file_full_path)
         hi = full_short_xingcan()
         test_short_cofficient(data,hi)
         return fail
@@ -597,10 +600,10 @@ def spae(c_show):
                     print(n + '\t' + r)
 
 
-if __name__ == '__main__':
-    filepath = r'D:\zhaoxiuyu\桌面\aa\ds_adapter.c'
-    c_show = show(filepath)
-    spae(c_show)
+# if __name__ == '__main__':
+#     filepath = r'D:\zhaoxiuyu\桌面\aa\ds_adapter.c'
+#     c_show = show(filepath)
+#     spae(c_show)
 
 
 
