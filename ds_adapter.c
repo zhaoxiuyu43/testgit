@@ -367,7 +367,10 @@ void ds_delete_ids(void *input){
             file = file->pNext;
         }
     }
-
+    if(sport_data_cnt >= input->data_cnt){
+        DC_LOG_INFO("sport_info skip %d %d\n",sport_data_cnt,input->data_cnt);
+        return;
+    }
     if(file_list == NULL){
         DC_LOG_INFO("ds_delete_ids no ids list\n");
     }else{
@@ -809,7 +812,7 @@ void ds_send_stock_list(StockSymbol_List *list){
     uint32_t len = sizeof(StockSymbol_List);
     uint8_t *out_buffer;
 
-    if(list->list_count > 0){
+     if(list->list_count > 0){
         len += list->list_count*(sizeof(StockSymbol));
         for(uint8_t index = 0;index < list->list_count; index++){
             len += strlen(list->list[index].symbol)+1;
