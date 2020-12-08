@@ -147,6 +147,8 @@ void ds_upload_ids(){
     DataMsg_t msg;
     memset(&msg,0,sizeof(DataMsg_t));
     msg.msg_id = DATA_CMD_UPLOAD_TODAY_IDS;
+    msg.flag = MSG_HAS_DATA;
+    msg.msg_data = buf;
     msg.flag |= MSG_FLAG_TYPE_MASK;
     dc_xQueueSend(g_dc_ctrl.receive_queue,&msg,100,false);
 }
