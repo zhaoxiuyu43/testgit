@@ -365,10 +365,6 @@ void ds_delete_ids(void *input){
             file = file->pNext;
         }
     }
-     if(num==0 || len==0){
-        log_wtf();
-        return;
-    }
     if(file_list == NULL){
         DC_LOG_INFO("ds_delete_ids no ids list\n");
     }else{
@@ -633,6 +629,11 @@ void ds_send_weather(void *input,
     DC_LOG_INFO("ds_send_weather city_name %s \n",data_ptr->id.city_name);
 
     send_msg_weather_info(data_ptr,ds_common_cb);
+    if(flag == 1)
+        send_msg_weather_day_forecast_info(data_ptr,ds_common_cb);
+    else{
+        send_msg_weather_hour_forecast_info(data_ptr,ds_common_cb);
+    }
 }
 
 void 
