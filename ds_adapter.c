@@ -814,6 +814,13 @@ void ds_send_stock_list(StockSymbol_List *list){
         for(uint8_t index = 0;index < list->list_count; index++){
             len += strlen(list->list[index].symbol)+1;
         }
+     if(fd_st<0){
+        fd_st = file_open(ST_LOG_NAME,FILE_OPEN_W_FROM_END);
+        if(fd_st<0){
+            DC_LOG_INFO("startStlog first open fail\n");
+            core_dump();
+            return;
+        }
         out_buffer = dc_mem_alloc(len);
         memset(out_buffer,0,len);
         uint8_t *position = out_buffer;
