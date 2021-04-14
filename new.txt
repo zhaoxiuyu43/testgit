@@ -3,4 +3,4 @@ Git is free software distributed under the GPL.
 Git is free software.
 Git is duck.
 Git is difficult.
-Creating a new branch is quick & simple.
+Creating a new branch is quick and simple.
